@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "8JibLI97qMw=",
+  "success": true,
+  "projectFilePath": "/home/lenovo/Desktop/RabbitMQ/HelloWord.Send/HelloWord.Send.csproj",
+  "expectedPackageFiles": [
+    "/home/lenovo/.nuget/packages/rabbitmq.client/7.2.1/rabbitmq.client.7.2.1.nupkg.sha512",
+    "/home/lenovo/.nuget/packages/system.io.pipelines/8.0.0/system.io.pipelines.8.0.0.nupkg.sha512",
+    "/home/lenovo/.nuget/packages/system.threading.ratelimiting/8.0.0/system.threading.ratelimiting.8.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
