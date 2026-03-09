@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "RB4kKe/ozco=",
+  "success": true,
+  "projectFilePath": "/home/lenovo/Desktop/RabbitMQ/WorkQueues.Worker/WorkQueues.Worker.csproj",
+  "expectedPackageFiles": [
+    "/tmp/cursor-sandbox-cache/01832582d12ea690f13ace0b8ca80330/nuget/rabbitmq.client/7.2.1/rabbitmq.client.7.2.1.nupkg.sha512",
+    "/tmp/cursor-sandbox-cache/01832582d12ea690f13ace0b8ca80330/nuget/system.io.pipelines/8.0.0/system.io.pipelines.8.0.0.nupkg.sha512",
+    "/tmp/cursor-sandbox-cache/01832582d12ea690f13ace0b8ca80330/nuget/system.threading.ratelimiting/8.0.0/system.threading.ratelimiting.8.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
