@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Routing.EmitLog", "Routing.EmitLog\Routing.EmitLog.csproj", "{BAAF3C24-7CA1-49E0-ABF9-AAC8A74D5E5A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Routing.Receive", "Routing.Receive\Routing.Receive.csproj", "{92EEAE3B-7D0B-4DF5-9E3A-6EE0CC69994F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BAAF3C24-7CA1-49E0-ABF9-AAC8A74D5E5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAAF3C24-7CA1-49E0-ABF9-AAC8A74D5E5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAAF3C24-7CA1-49E0-ABF9-AAC8A74D5E5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAAF3C24-7CA1-49E0-ABF9-AAC8A74D5E5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92EEAE3B-7D0B-4DF5-9E3A-6EE0CC69994F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92EEAE3B-7D0B-4DF5-9E3A-6EE0CC69994F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92EEAE3B-7D0B-4DF5-9E3A-6EE0CC69994F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92EEAE3B-7D0B-4DF5-9E3A-6EE0CC69994F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

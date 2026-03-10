@@ -1,0 +1,71 @@
+var factory = new ConnectionFactory { HostName = "localhost" };
+Bu satır, RabbitMQ sunucusuna bağlanmak için kullanılacak bir ConnectionFactory nesnesi oluşturur. HostName özelliği, RabbitMQ sunucusunun çalıştığı hostun adresini belirtir.
+
+using var connection = factory.CreateConnection();
+using var channel = connection.CreateModel();
+factory.CreateConnection() çağrısı, RabbitMQ sunucusuna bir bağlantı oluşturur. using anahtar kelimesi, connection ve channel nesnelerinin yaşam döngüsünü yönetir ve işleri bittikten sonra kaynakların düzgün bir şekilde serbest bırakılmasını sağlar.
+connection.CreateModel() çağrısı, mesajların gönderilip alınacağı bir kanal oluşturur.
+
+
+channel.QueueDeclare(queue: "hello",
+                     durable: false,
+                     exclusive: false,
+                     autoDelete: false,
+                     arguments: null);
+QueueDeclare metodu, mesajların gönderileceği/alınacağı bir kuyruk oluşturur ya da var olan bir kuyruğu kullanır. Bu kodda kuyruğun adı "hello" olarak belirlenmiştir.
+durable: false ayarı, kuyruğun sadece hafızada tutulacağını, sunucu yeniden başlatıldığında kaybolacağını belirtir.
+exclusive: false ayarı, bu kuyruğun birden fazla bağlantı tarafından kullanılabileceğini gösterir.
+autoDelete: false ayarı, kuyruğun son abonenin bağlantısını kesmesi durumunda otomatik olarak silinmeyeceğini belirtir.
+arguments parametresi, kuyruğun davranışını özelleştirmek için kullanılan ilave argümanları içerir. Bu parametre, kuyrukla ilgili çeşitli özellikleri ve ayarları belirlemek için kullanılır. arguments parametresi bir IDictionary<string, object> tipindedir ve çeşitli anahtar-değer çiftleri içerebilir.
+
+const string message = "Hello World!";
+var body = Encoding.UTF8.GetBytes(message);
+Göndereceğimiz değeri byte'a çevirir.
+
+channel.BasicPublish(exchange: string.Empty,
+                     routingKey: "hello",
+                     basicProperties: null,
+                     body: body);
+exchange parametresi, mesajın hangi exchange üzerinden yönlendirileceğini belirtir. RabbitMQ'da, exchange'ler mesajların hangi kuyruklara gideceğini belirleyen yapılar olarak işlev görür. Bu örnekte string.Empty kullanılmış, yani mesaj, varsayılan (default) exchange üzerinden gönderilir. Varsayılan exchange, mesajı doğrudan routingKey ile belirtilen kuyruğa yönlendirir.
+routingKey parametresi, mesajın hangi kuyruğa yönlendirileceğini belirtir. Bu örnekte "hello" olarak belirlenmiş, yani mesaj "hello" isimli kuyruğa gönderilir.
+basicProperties parametresi, mesajın bazı ek özelliklerini (mesela teslimat modu, öncelik, TTL vb.) belirlemek için kullanılır. Burada null olarak belirtilmiş, yani herhangi bir ek özellik belirtilmemiştir.
+body parametresi, gönderilecek mesajın içeriğini içerir. Bu içerik bayt dizisi (byte[]) formatında olmalıdır. body değişkeni, bu örnekte dışarıdan sağlanan mesajın bayt dizisine referans vermektedir.
+
+Bu BasicPublish çağrısı, belirtilen exchange üzerinden, belirtilen routing key ile mesajı yayınlar. Bu durumda, "hello" isimli kuyruğa, ekstra özellik belirtilmeden, belirtilen mesaj içeriği gönderilmiş olur. RabbitMQ'da mesaj yayınlama (publishing) işlemi genellikle bu şekilde gerçekleştirilir.
+
+
+Kanallar RabbitMQ ile İletişimi sağlayan kanallardır. Bir RabbitMQ de birden fazla kanal açılabilir. Her kanal birden fazla Kuyruğa ve Exchange sahip olabilir.
+
+Kuyruk Mesajları alıp iletmeye ve onları saklamaya yarayan sistem
+
+Exchange birden fazla kuyruğu yönetmeye sağlayan sistem
+
+
+var consumer = new EventingBasicConsumer(channel);
+
+Bu satır, channel adında daha önce oluşturulmuş bir kanala (channel) bağlı yeni bir EventingBasicConsumer nesnesi oluşturur. EventingBasicConsumer sınıfı, RabbitMQ kuyruğundan gelen mesajları dinlemek için kullanılır.
+consumer.Received += (model, ea) =>
+
+Bu satır, consumer nesnesinin Received olayına (event) bir olay işleyicisi (event handler) ekler. Bu olay işleyicisi, kuyruktan bir mesaj alındığında tetiklenir. model parametresi, olayın gerçekleştiği modeli (genellikle kanalı) temsil ederken, ea parametresi olayla ilgili bilgileri içerir.
+
+var body = ea.Body.ToArray();
+
+Bu satır, ea (BasicDeliverEventArgs türünde) içindeki Body özelliğinden gelen ham mesajı alır ve bir byte dizisine çevirir.
+var message = Encoding.UTF8.GetString(body);
+
+Burada, body değişkenindeki byte dizisi UTF-8 formatında bir stringe çevrilir. Bu, RabbitMQ'dan alınan ham mesajın okunabilir bir metne dönüştürülmesini sağlar.
+
+
+channel.BasicConsume(queue: "hello", autoAck: true, consumer: consumer);
+channel.BasicConsume(...)
+
+channel değişkeni, RabbitMQ ile bağlantı kurmak ve mesajları göndermek veya almak için kullanılan bir kanalı (channel) temsil eder. BasicConsume metodu, bu kanal üzerinden belirli bir kuyruktan mesajları tüketmek (almak) için kullanılır.
+queue: "hello"
+
+queue parametresi, mesajların alınacağı kuyruğun adını belirtir. Bu örnekte, "hello" adında bir kuyruk kullanılmaktadır. RabbitMQ'da, mesajlar belirli kuyruklarda saklanır ve tüketilir.
+autoAck: true
+
+autoAck parametresi, mesajların otomatik olarak onaylanıp onaylanmayacağını (acknowledgement) belirtir. Eğer true ise, mesaj alındığında otomatik olarak onaylanır, yani RabbitMQ'ya mesajın başarıyla işlendiği ve kuyruktan silinebileceği bildirilir. false olursa, geliştiricinin manuel olarak mesajı onaylaması (acknowledge) gerekir. Bu, mesaj işleme sırasında bir hata olması durumunda mesajın kaybolmamasını sağlar.
+consumer: consumer
+
+consumer parametresi, mesajların nasıl işleneceğini tanımlayan bir EventingBasicConsumer nesnesini belirtir. Bu nesne, daha önce oluşturulmuş ve mesaj alındığında ne yapılacağını tanımlayan olay işleyicilerine (event handlers) sahiptir. Bu örnekte, consumer nesnesi daha önce oluşturulmuş ve bir Received olayı ile mesajları almak üzere yapılandırılmıştır.
